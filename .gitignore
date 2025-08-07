@@ -26,3 +26,16 @@ dist-ssr
 .env
 .env.local
 .env.*
+
+
+# Python (backend)
+env/
+__pycache__/
+*.py[cod]
+*.sqlite3
+backend/.env
+
+# General
+*.log
+.DS_Store
+Thumbs.db

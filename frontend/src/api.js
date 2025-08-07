@@ -1,13 +1,15 @@
 import Vapi from "@vapi-ai/web";
 
-export const vapi = new Vapi(import.meta.env.VAPI_API_KEY);
+export const vapi = new Vapi({
+  apiKey: import.meta.env.VITE_VAPI_API_KEY, // ✅ key name corrected
+});
+
 const assistantId = import.meta.env.VITE_ASSISTANT_API_KEY;
 
 export const startAssistant = async () => {
-    const assistants = await vapi.getAssistants();
-  return await vapi.start(assistantId, assistants)
+  await vapi.start(assistantId);
 };
 
 export const stopAssistant = async () => {
-    return await vapi.stop(assistantId);
+  await vapi.stop(); // No ID needed here
 };
