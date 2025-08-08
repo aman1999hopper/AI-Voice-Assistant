@@ -30,19 +30,17 @@ export default function Form({ type }: FormProps) {
         router.push("/login");
       } else {
         // ✅ Use Next.js internal login route (as you already have)
-        const res = await fetch("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ email: username, password }),
-          headers: { "Content-Type": "application/json" },
-        });
+        const res = await axios.post("/token/", {
+            username,
+            password,
+        })
 
-        const data = await res.json();
-        if (data.success) {
-          alert("Login successful");
-          router.push("/");
-        } else {
-          alert(data.message);
-        }
+        localStorage.setItem("access_token", res.data.access);
+        localStorage.setItem("refresh_token", res.data.refresh);
+
+        console.log(res.data); // Optional: Inspect response
+        alert("Login successful");
+        router.push("/dashboard"); // Redirect to dashboard or home page
       }
     } catch (error: unknown) {
       console.error("Error:", error);
