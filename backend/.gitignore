@@ -15,3 +15,6 @@ env/
 db.sqlite3
 /media/
 staticfiles/
+
+# .env file
+.env
