@@ -2,6 +2,7 @@
 
 import ChartCard from "@/components/ChartCard";
 import Topbar from "@/components/TopBar";
+import StatCards from "@/components/StatCards";
 
 type StatCardProps = {
   icon: React.ReactNode;
@@ -21,7 +22,24 @@ export default function StatCard({ icon, value, label, delta, deltaClass, }: Sta
       </div>
        <div className="flex items-start justify-between gap-4">
         <ChartCard title="Payments Overview" />
+        <div className="flex items-start justify-between gap-4">
+        <StatCards 
+          icon={<i className="fas fa-users"></i>} // Example icon, replace with actual icon
+          value="1,234"
+          label="Users"
+          delta="+12%"
+          deltaClass="text-green-400"
+        />
+        <StatCards 
+          icon={<i className="fas fa-dollar-sign"></i>} // Example icon, replace with actual icon
+          value="$56,789"
+          label="Revenue"
+          delta="-5%"
+          deltaClass="text-red-400"
+        />
       </div>
+      </div>
+      
     </div>
     
   );
