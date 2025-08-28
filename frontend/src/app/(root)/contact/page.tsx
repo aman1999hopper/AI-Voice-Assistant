@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -9,7 +9,7 @@ export default function ContactPage() {
     message: "",
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -17,22 +17,39 @@ export default function ContactPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.message) {
-      alert("Please fill in all fields.");
-      return;
-    }
+    setStatus("success");
 
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+
+        // 👇 20 seconds baad form dobara dikhao
+        setTimeout(() => {
+          setStatus("idle");
+        }, 10000);
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
-      <section className= "py-16 text-center mt-8">
+      <section className="py-16 text-center mt-8">
         <h1 className="text-4xl md:text-5xl font-bold">Contact Us</h1>
         <p className="mt-4 text-lg text-gray-200">
           Wed love to hear from you! Get in touch with us below.
@@ -44,8 +61,12 @@ export default function ContactPage() {
         {/* Contact Form */}
         <div className="bg-gray-800 p-6 rounded-2xl shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Send us a message</h2>
-          {submitted ? (
-            <p className="text-green-400">Thank you! Your message has been sent.</p>
+
+          {status === "success" ? (
+            <p className="text-green-400 animate-pulse">
+              ✅ Thank you! Your message has been sent.
+              <br />
+            </p>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -55,6 +76,7 @@ export default function ContactPage() {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-indigo-400"
+                required
               />
               <input
                 type="email"
@@ -63,6 +85,7 @@ export default function ContactPage() {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-indigo-400"
+                required
               />
               <textarea
                 name="message"
@@ -71,18 +94,21 @@ export default function ContactPage() {
                 onChange={handleChange}
                 rows={5}
                 className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-indigo-400"
+                required
               />
+
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors p-3 rounded-lg font-semibold"
+                disabled={status === "loading"}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors p-3 rounded-lg font-semibold disabled:opacity-50"
               >
-                Send Message
+                {status === "loading" ? "Sending..." : "Send Message"}
               </button>
             </form>
           )}
         </div>
 
-        {/* Contact Info */}
+        {/* Contact Info (same as your code) */}
         <div className="space-y-6">
           <div className="bg-gray-800 p-6 rounded-2xl shadow-lg">
             <h3 className="text-xl font-semibold mb-2">📍 Our Office</h3>
