@@ -19,7 +19,7 @@ export default function Header() {
       <div className="backdrop-blur-lg bg-white/10 shadow-lg border-b border-white/20">
         <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
           {/* Logo */}
-          <h1 className="text-2xl font-bold text-white">AI Voice Assistant</h1>
+          <h1 className="text-2xl font-bold text-white">MediCare+</h1>
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex space-x-8">
