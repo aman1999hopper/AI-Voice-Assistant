@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
+import Topbar from "@/components/TopBar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -14,6 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           collapsed ? "ml-20" : "ml-64"
         }`}
       >
+        <Topbar />
         {children}
       </main>
     </div>

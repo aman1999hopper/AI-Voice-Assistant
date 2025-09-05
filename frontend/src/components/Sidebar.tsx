@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import {
   CalendarIcon,
   HomeIcon,
@@ -13,20 +14,21 @@ import {
 type NavItemProps = {
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
+  href: string;       // 👈 added href
   active?: boolean;
   collapsed?: boolean;
 };
 
-const NavItem: React.FC<NavItemProps> = ({ Icon, label, active = false, collapsed }) => (
-  <a
+const NavItem: React.FC<NavItemProps> = ({ Icon, label, href, active = false, collapsed }) => (
+  <Link
+    href={href}
     className={`flex items-center gap-3 px-3 py-2 rounded-xl transition ${
       active ? "bg-slate-700/60 text-white" : "text-slate-300 hover:bg-slate-700/20"
     }`}
-    href="#"
   >
     <Icon className="w-5 h-5" />
     {!collapsed && <span className="text-sm font-medium">{label}</span>}
-  </a>
+  </Link>
 );
 
 interface SidebarProps {
@@ -71,11 +73,11 @@ export default function Sidebar({ collapsed, toggle }: SidebarProps) {
       {/* Menu */}
       {!collapsed && <div className="mb-4 text-xs uppercase text-slate-400">Main Menu</div>}
       <nav className="flex-1 space-y-1">
-        <NavItem Icon={HomeIcon} label="Home" active collapsed={collapsed} />
-        <NavItem Icon={CalendarIcon} label="All Users" collapsed={collapsed} />
-        <NavItem Icon={UserIcon} label="All Books" collapsed={collapsed} />
-        <NavItem Icon={ClipboardDocumentListIcon} label="Borrow Request" collapsed={collapsed} />
-        <NavItem Icon={TableCellsIcon} label="Account Request" collapsed={collapsed} />
+        <NavItem Icon={HomeIcon} label="Home" href="/dashboard" active collapsed={collapsed} />
+        <NavItem Icon={CalendarIcon} label="All Users" href="/dashboard/users" collapsed={collapsed} />
+        <NavItem Icon={UserIcon} label="All Books" href="/dashboard/books" collapsed={collapsed} />
+        <NavItem Icon={ClipboardDocumentListIcon} label="Borrow Request" href="/dashboard/borrow" collapsed={collapsed} />
+        <NavItem Icon={TableCellsIcon} label="Account Request" href="/dashboard/accounts" collapsed={collapsed} />
       </nav>
 
       {/* Footer */}
